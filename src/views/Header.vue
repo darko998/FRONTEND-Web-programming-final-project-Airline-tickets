@@ -8,7 +8,7 @@
       <h2>Frontend Project Darko Dimitrijevic RN 94/18</h2>
     </div>
 
-    <div class="header-user-book-num" v-if="isUserLoggedIn">
+    <div class="header-user-book-num" v-if="userData.isUserLoggedIn">
       <h2>1</h2>
 
       <svg
@@ -32,7 +32,7 @@
       </svg>
     </div>
 
-    <div class="header-username" v-if="isUserLoggedIn">
+    <div class="header-username" v-if="userData.isUserLoggedIn">
       <svg
         class="bi bi-people-circle"
         width="3em"
@@ -51,8 +51,8 @@
           clip-rule="evenodd"
         />
       </svg>
-      <h3>Darko433</h3>
-      <h5>Administrator</h5>
+      <h3>{{ this.userData.username }}</h3>
+      <h5>{{ this.userData.userType }}</h5>
     </div>
   </div>
 </template>
@@ -60,11 +60,14 @@
 <script>
 export default {
   name: "Header",
+
   data () {
     return {
-      isUserLoggedIn: true
+      isUserLoggedIn: true,
     }
-  }
+  },
+
+  props: ['userData'],
 
 }
 </script>

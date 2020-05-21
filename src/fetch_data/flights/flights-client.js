@@ -9,6 +9,7 @@ let FlightsClient = {
 			headers: {
 				"Accept": "application/json",
 				"Content-Type": "application/json",
+				"Authorization": "Bearer " + localStorage.jwt
 			},
 		}).then((response) => {
 			comp.flights = JSON.parse(JSON.stringify(response.data));

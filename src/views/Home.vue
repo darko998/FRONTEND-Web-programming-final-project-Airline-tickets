@@ -1,5 +1,6 @@
 <template>
   <div>
+    <Header v-bind:userData="this.userData" />
     <h1>Available tickets</h1>
     <TicketsList v-bind:tickets="this.tickets" />
   </div>
@@ -9,18 +10,25 @@
 
 <script>
 import TicketsList from '../components/TicketsList.vue'
+import Header from '@/views/Header'
 
 export default {
   name: "Home",
 
   components: {
-    TicketsList
+    TicketsList,
+    Header
   },
   methods: {
   },
   data () {
     return {
-      tickets: []
+      tickets: [],
+      userData: {
+        isUserLoggedIn: true,
+        username: localStorage.getItem('username'),
+        userType: localStorage.getItem('userType')
+      }
     }
   }
 

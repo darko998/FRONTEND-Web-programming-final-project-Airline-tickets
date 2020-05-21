@@ -9,6 +9,7 @@ let CitiesClient = {
 			headers: {
 				"Accept": "application/json",
 				"Content-Type": "application/json",
+				"Authorization": "Bearer " + localStorage.jwt
 			},
 		}).then((response) => {
 			comp.cities = JSON.parse(JSON.stringify(response.data));

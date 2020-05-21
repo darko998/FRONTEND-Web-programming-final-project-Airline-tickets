@@ -5,13 +5,13 @@
       <h4>Filter tickets</h4>
       <br />
       <br />
-      <form>
+      <form v-on:submit="fetchDataWithFilter">
         <!-- FROM INPUT FIELD-->
         <div class="form-group">
           <label for="from">
             <strong>From</strong>
           </label>
-          <input type="text" class="form-control" id="from" placeholder="From" />
+          <input type="text" class="form-control" id="from" placeholder="From" v-model="originCity" />
         </div>
 
         <!-- DESTINATION INPUT FIELD-->
@@ -19,7 +19,13 @@
           <label for="to">
             <strong>To</strong>
           </label>
-          <input type="text" class="form-control" id="to" placeholder="To" />
+          <input
+            type="text"
+            class="form-control"
+            id="to"
+            placeholder="To"
+            v-model="destinationCity"
+          />
         </div>
 
         <br />
@@ -30,7 +36,13 @@
           <label for="depart-date">
             <strong>Depart date</strong>
           </label>
-          <input type="text" class="form-control" id="depart-date" placeholder="Return date" />
+          <input
+            type="datetime-local"
+            class="form-control"
+            id="depart-date"
+            placeholder="Return date"
+            v-model="departDate"
+          />
         </div>
 
         <!-- RETURN DATE FIELD-->
@@ -38,7 +50,13 @@
           <label for="return-date">
             <strong>Return date</strong>
           </label>
-          <input type="text" class="form-control" id="return-date" placeholder="Return date" />
+          <input
+            type="datetime-local"
+            class="form-control"
+            id="return-date"
+            placeholder="Return date"
+            v-model="returnDate"
+          />
         </div>
 
         <br />
@@ -124,8 +142,8 @@
 
                   <!-- DIV FOR RETURN DATE  -->
                   <div class="return-date">
-                    <p>Depart date</p>
-                    <h3>{{ new Date(ticket.returnDate).toLocaleString() }}</h3>
+                    <p>Return date</p>
+                    <h3>{{ (ticket.returnDate == null) ? "/" : new Date(ticket.returnDate).toLocaleString() }}</h3>
                   </div>
 
                   <!-- DIV FOR TICKET TYPE  -->
@@ -243,6 +261,21 @@ export default {
       }
 
       return companyName;
+    },
+
+    fetchDataWithFilter () {
+      var formatedDepartDate = new Date(this.departDate).getTime();
+      var formatedReturnDate = new Date(this.returnDate).getTime();
+
+      if (isNaN(formatedDepartDate)) {
+        formatedDepartDate = "";
+      }
+
+      if (isNaN(formatedReturnDate)) {
+        formatedReturnDate = "";
+      }
+
+      TicketClient.loadFilteredTickets(this.originCity, this.destinationCity, formatedDepartDate, formatedReturnDate, this.$parent);
     }
   },
 
@@ -260,7 +293,11 @@ export default {
     return {
       flights: [],
       cities: [],
-      companies: []
+      companies: [],
+      originCity: "",
+      destinationCity: "",
+      departDate: "",
+      returnDate: ""
     }
   }
 }

@@ -9,6 +9,7 @@ let CompaniesClient = {
 			headers: {
 				"Accept": "application/json",
 				"Content-Type": "application/json",
+				"Authorization": "Bearer " + localStorage.jwt
 			},
 		}).then((response) => {
 			comp.companies = JSON.parse(JSON.stringify(response.data));

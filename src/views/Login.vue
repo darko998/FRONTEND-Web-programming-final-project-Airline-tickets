@@ -1,47 +1,58 @@
 <template>
-  <div class="div-background">
-    <div class="container">
-      <div class="row">
-        <div class="col-sm-9 col-md-7 col-lg-7 mx-auto">
-          <div class="card card-signin my-5">
-            <div class="card-body">
-              <h5 class="card-title text-center">Sign In</h5>
-              <form class="form-signin">
-                <div class="form-label-group">
-                  <input
-                    type="email"
-                    id="inputEmail"
-                    class="form-control"
-                    placeholder="Email address"
-                    required
-                    autofocus
-                  />
-                  <label for="inputEmail">Email address</label>
-                </div>
+  <div class="main-div">
+    <Header v-bind:userData="this.userData" />
 
-                <div class="form-label-group">
-                  <input
-                    type="password"
-                    id="inputPassword"
-                    class="form-control"
-                    placeholder="Password"
-                    required
-                  />
-                  <label for="inputPassword">Password</label>
-                </div>
+    <div class="div-background">
+      <div class="container">
+        <div class="row">
+          <div class="col-sm-9 col-md-7 col-lg-7 mx-auto">
+            <div class="card card-signin my-5">
+              <div class="card-body">
+                <h5 class="card-title text-center">Sign In</h5>
+                <form class="form-signin" v-on:submit="login">
+                  <div class="form-label-group">
+                    <input
+                      type="text"
+                      id="username"
+                      class="form-control"
+                      placeholder="Username"
+                      v-model="username"
+                      required
+                      autofocus
+                    />
+                    <label for="username">Username</label>
+                  </div>
 
-                <div class="custom-control custom-checkbox mb-3">
-                  <input type="checkbox" class="custom-control-input" id="customCheck1" />
-                  <label class="custom-control-label" for="customCheck1">Remember password</label>
-                </div>
-                <br />
-                <br />
+                  <div class="form-label-group">
+                    <input
+                      type="password"
+                      id="inputPassword"
+                      class="form-control"
+                      placeholder="Password"
+                      v-model="password"
+                      required
+                    />
+                    <label for="inputPassword">Password</label>
+                  </div>
 
-                <button
-                  class="btn btn-lg btn-primary btn-block text-uppercase"
-                  type="submit"
-                >Sign in</button>
-              </form>
+                  <div class="custom-control custom-checkbox mb-3">
+                    <input type="checkbox" class="custom-control-input" id="customCheck1" />
+                    <label class="custom-control-label" for="customCheck1">Remember password</label>
+                  </div>
+                  <br />
+
+                  <div class="error-div">
+                    <p class="error-msg">{{ this.errorMsg }}</p>
+                  </div>
+
+                  <br />
+
+                  <button
+                    class="btn btn-lg btn-primary btn-block text-uppercase"
+                    type="submit"
+                  >Sign in</button>
+                </form>
+              </div>
             </div>
           </div>
         </div>
@@ -51,13 +62,53 @@
 </template>
 
 <script>
+import UserClient from '../fetch_data/users/users-client.js'
+import Header from '@/views/Header'
+
 export default {
-  name: "Login"
+  name: "Login",
+
+  components: {
+    Header
+  },
+
+  methods: {
+    login (e) {
+      e.preventDefault();
+
+      UserClient.login(this.username, this.password, this);
+
+      return false;
+    }
+  },
+
+  data () {
+    return {
+      users: [],
+      username: "",
+      password: "",
+      userData: {
+        isUserLoggedIn: false,
+        username: "",
+        userType: ""
+      },
+      errorMsg: ""
+    }
+  }
 
 }
 </script>
 
 <style scoped>
+.error-msg {
+  color: red;
+  font-size: 24px;
+}
+.main-div {
+  width: 100%;
+  height: 100%;
+}
+
 .div-background {
   width: 100%;
   height: 100%;

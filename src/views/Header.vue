@@ -9,7 +9,7 @@
     </div>
 
     <div class="header-user-book-num" v-if="userData.isUserLoggedIn">
-      <h2>1</h2>
+      <h2>{{ this.userData.reservationCount }}</h2>
 
       <svg
         class="bi bi-inbox"

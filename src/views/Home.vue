@@ -27,8 +27,10 @@ export default {
       userData: {
         isUserLoggedIn: true,
         username: localStorage.getItem('username'),
-        userType: localStorage.getItem('userType')
-      }
+        userType: localStorage.getItem('userType'),
+        reservationCount: 0
+      },
+
     }
   }
 

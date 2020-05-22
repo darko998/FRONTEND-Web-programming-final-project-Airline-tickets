@@ -32,6 +32,7 @@ let ClientUser = {
 		}).then((response) => {
 			console.log(JSON.parse(JSON.stringify(response.data)))
 
+			localStorage.setItem('userId', JSON.parse(JSON.stringify(response.data.id)));
 			localStorage.setItem('jwt', JSON.parse(JSON.stringify(response.data.jwtToken)));
 			localStorage.setItem('username', JSON.parse(JSON.stringify(response.data.username)));
 			localStorage.setItem('userType', JSON.parse(JSON.stringify(response.data.userType)));

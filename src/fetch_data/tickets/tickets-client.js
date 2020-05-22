@@ -1,5 +1,6 @@
 import axios from 'axios'
 
+
 const baseUrl = "http://localhost:9999/AirlineApp/tickets";
 
 let TicketClient = {
@@ -12,8 +13,10 @@ let TicketClient = {
 				"Authorization": "Bearer " + localStorage.jwt
 			},
 		}).then((response) => {
-			comp.tickets = JSON.parse(JSON.stringify(response.data));
+			let tickets = JSON.parse(JSON.stringify(response.data));
 
+
+			comp.tickets = tickets;
 		}, (error) => {
 			console.log("An error occured:");
 			console.log(error);

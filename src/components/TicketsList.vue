@@ -149,8 +149,8 @@
                   <!-- DIV FOR TICKET TYPE  -->
                   <div class="one-way">
                     <p>Ticket type</p>
-                    <h3 v-if="ticket.oneWay == 1">One way</h3>
-                    <h3 v-if="ticket.oneWay == 0">Return</h3>
+                    <h3 v-if="ticket.oneWay">One way</h3>
+                    <h3 v-if="!ticket.oneWay">Return</h3>
                   </div>
 
                   <!-- DIV FOR AVAILABLE TICKET NUMBER  -->
@@ -170,7 +170,16 @@
           </div>
           <!-- DIV FOR BUTTON BOOK  -->
           <div class="div-book">
-            <button class="apply-button">Book</button>
+            <button
+              class="apply-button"
+              v-on:click="book(ticket, ticket.flightId)"
+              v-if="!ticket.reserved"
+            >Book</button>
+            <button
+              class="apply-button"
+              v-on:click="unbook(ticket, ticket.flightId)"
+              v-if="ticket.reserved"
+            >UnBook</button>
           </div>
         </div>
       </li>
@@ -184,12 +193,30 @@ import TicketClient from '../fetch_data/tickets/tickets-client.js'
 import FlightsClient from '../fetch_data/flights/flights-client.js'
 import CitiesClient from '../fetch_data/cities/cities-client.js'
 import CompaniesClient from '../fetch_data/companies/companies-client.js'
+import ReservationClient from '../fetch_data/reservations/reservations-client.js'
 
 export default {
   name: "TicketsList",
   methods: {
+    book (ticket, flightId) {
+      ReservationClient.book(ticket.id, flightId, this);
+      ticket.reserved = true;
+    },
+    unbook (ticket) {
+      ReservationClient.unbook(ticket.id, this);
+      ticket.reserved = false;
+    },
     loadTickets () {
+
+      ReservationClient.getReservationCount(this.$parent); /** Refresh reservations number for user */
       TicketClient.loadTickets(this.$parent);
+    },
+    refreshReservationCount () {
+      /** Callback function that refresh user reservation number. This function is called when function 
+       * ReservationClient.book() has finished its work, because this function is callback.
+       */
+
+      ReservationClient.getReservationCount(this.$parent); /** Refresh reservations number for user */
     },
     loadFlights () {
       FlightsClient.loadFlights(this);
@@ -280,7 +307,6 @@ export default {
   },
 
   created () {
-
     this.loadTickets();
     this.loadFlights();
     this.loadCities();
@@ -297,7 +323,8 @@ export default {
       originCity: "",
       destinationCity: "",
       departDate: "",
-      returnDate: ""
+      returnDate: "",
+      hidden: []
     }
   }
 }
@@ -479,6 +506,7 @@ p {
 .return-date {
   display: inline-block;
   margin-right: 100px;
+  min-width: 230px;
 }
 .ticket-title {
   margin-top: 20px;

@@ -63,7 +63,7 @@
 
 <script>
 import UserClient from '../fetch_data/users/users-client.js'
-import Header from '@/views/Header'
+import Header from '@/components/Header'
 
 export default {
   name: "Login",

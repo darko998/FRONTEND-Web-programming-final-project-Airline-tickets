@@ -1,28 +1,36 @@
 <template>
   <div>
     <Header v-bind:userData="this.userData" />
-    <h1>Available tickets</h1>
-    <TicketsList v-bind:tickets="this.tickets" />
+
+    <h1>{{ companyName }}</h1>
+    <CompanyTickets v-bind:tickets="this.tickets" />
   </div>
 </template>
 
-
-
 <script>
-import TicketsList from '../components/TicketsList.vue'
+import CompanyClient from '../fetch_data/companies/companies-client.js'
+import CompanyTickets from '../components/CompanyTickets.vue'
 import Header from '@/components/Header'
 
+
+
 export default {
-  name: "Home",
+  name: "CompanyPage",
 
   components: {
-    TicketsList,
-    Header
+    Header,
+    CompanyTickets
   },
-  methods: {
+
+  created () {
+    this.id = this.$route.params.id
+    CompanyClient.getCompanyNameById(this.id, this);
   },
+
   data () {
     return {
+      id: "",
+      companyName: "",
       tickets: [],
       userData: {
         isUserLoggedIn: true,
@@ -30,14 +38,11 @@ export default {
         userType: localStorage.getItem('userType'),
         reservationCount: 0
       },
-
     }
   }
 
 }
 </script>
-
-
 
 <style scoped>
 h1 {

@@ -4,6 +4,7 @@ import Login from '@/views/Login'
 import Home from '@/views/Home'
 import CompanyPage from '@/views/CompanyPage'
 import CreateTicket from '@/views/CreateTicket'
+import UserPage from '@/views/UserPage'
 
 
 
@@ -26,6 +27,11 @@ let router = new VueRouter({
 			path: '/company/:id',
 			name: 'company',
 			component: CompanyPage
+		},
+		{
+			path: '/users/:id',
+			name: 'userPage',
+			component: UserPage
 		},
 		{
 			path: '/tickets/create',

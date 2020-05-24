@@ -12,6 +12,9 @@ let TicketClient = {
 				"Content-Type": "application/json",
 				"Authorization": "Bearer " + localStorage.jwt
 			},
+			params: {
+				ticketType: "2" /** 2 means all ticket types */
+			}
 		}).then((response) => {
 			let tickets = JSON.parse(JSON.stringify(response.data));
 
@@ -23,7 +26,7 @@ let TicketClient = {
 		});
 	},
 
-	loadFilteredTickets (originCity, destinationCity, departDate, returnDate, comp) {
+	loadFilteredTickets (ticketType, originCity, destinationCity, departDate, returnDate, comp) {
 		axios.get(baseUrl, {
 			headers: {
 				"Accept": "application/json",
@@ -31,6 +34,7 @@ let TicketClient = {
 				"Authorization": "Bearer " + localStorage.jwt
 			},
 			params: {
+				ticketType: ticketType,
 				originCity: originCity,
 				destinationCity: destinationCity,
 				departDate: departDate,
@@ -52,7 +56,8 @@ let TicketClient = {
 				"Authorization": "Bearer " + localStorage.jwt
 			},
 			params: {
-				companyId: companyId
+				companyId: companyId,
+				ticketType: "2" /** 2 means all ticket types */
 			}
 		}).then((response) => {
 			let tickets = JSON.parse(JSON.stringify(response.data));
@@ -65,7 +70,7 @@ let TicketClient = {
 		});
 	},
 
-	loadCompanyFilteredTickets (originCity, destinationCity, departDate, returnDate, comp, companyId) {
+	loadCompanyFilteredTickets (ticketType, originCity, destinationCity, departDate, returnDate, comp, companyId) {
 		axios.get(baseUrl + "/company", {
 			headers: {
 				"Accept": "application/json",
@@ -73,6 +78,7 @@ let TicketClient = {
 				"Authorization": "Bearer " + localStorage.jwt
 			},
 			params: {
+				ticketType: ticketType,
 				originCity: originCity,
 				destinationCity: destinationCity,
 				departDate: departDate,

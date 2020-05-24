@@ -50,6 +50,47 @@ let ClientUser = {
 
 			comp.errorMsg = "Credentials are not valid!";
 		});
+	},
+
+
+	getUserTickets (comp) {
+		axios.get(baseUrl + "/" + comp.id + "/tickets", {
+			headers: {
+				"Accept": "application/json",
+				"Content-Type": "application/json",
+				"Authorization": "Bearer " + localStorage.jwt
+			}
+		}).then((response) => {
+			console.log(JSON.parse(JSON.stringify(response.data)));
+			comp.tickets = JSON.parse(JSON.stringify(response.data));
+		}, (error) => {
+			console.log("An error occured:");
+			console.log(error);
+		});
+	},
+
+
+	getFilteredUserTickets (ticketType, originCity, destinationCity, departDate, returnDate, comp) {
+		axios.get(baseUrl + "/" + comp.id + "/tickets", {
+			headers: {
+				"Accept": "application/json",
+				"Content-Type": "application/json",
+				"Authorization": "Bearer " + localStorage.jwt
+			},
+			params: {
+				ticketType: ticketType,
+				originCity: originCity,
+				destinationCity: destinationCity,
+				departDate: departDate,
+				returnDate: returnDate
+			}
+		}).then((response) => {
+			console.log(JSON.parse(JSON.stringify(response.data)));
+			comp.tickets = JSON.parse(JSON.stringify(response.data));
+		}, (error) => {
+			console.log("An error occured:");
+			console.log(error);
+		});
 	}
 
 }

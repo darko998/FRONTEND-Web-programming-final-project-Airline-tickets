@@ -31,11 +31,10 @@
           <strong>Add ticket</strong>
         </h5>
       </div>
-
       <h4>Filter tickets</h4>
       <br />
       <br />
-      <form v-on:submit="fetchDataWithFilterForCompany">
+      <form v-on:submit="fetchDataWithFilter">
         <!-- DROP DOWN FOR TICKET TYPE-->
         <div>
           <select class="ticket-type" id="ticket-type" v-model="ticketType">
@@ -198,6 +197,12 @@
                       <p>Available tickets</p>
                       <h3>{{ ticket.count }}</h3>
                     </div>
+
+                    <!-- DIV FOR TICKET STATUS  -->
+                    <div class="ticket-status">
+                      <p>Ticket status</p>
+                      <h3>{{ (ticket.departDate > new Date(Date.now() + 86400000)) ? 'Active' : 'Expired' }}</h3>
+                    </div>
                   </div>
 
                   <!-- DIV FOR COMPANY  -->
@@ -230,16 +235,17 @@
   </div>
 </template>
 
-
 <script>
-import TicketClient from '../fetch_data/tickets/tickets-client.js'
+//import TicketClient from '../fetch_data/tickets/tickets-client.js'
 import FlightsClient from '../fetch_data/flights/flights-client.js'
 import CitiesClient from '../fetch_data/cities/cities-client.js'
 import CompaniesClient from '../fetch_data/companies/companies-client.js'
 import ReservationClient from '../fetch_data/reservations/reservations-client.js'
+import UserClient from '../fetch_data/users/users-client.js'
+
 
 export default {
-  name: "CompanyTickets",
+  name: "UserTickets",
   methods: {
     book (ticket, flightId) {
       ReservationClient.book(ticket, flightId, this);
@@ -250,7 +256,7 @@ export default {
     loadTickets () {
 
       ReservationClient.getReservationCount(this.$parent); /** Refresh reservations number for user */
-      TicketClient.loadCompanyTickets(this.$parent.id, this.$parent);
+      UserClient.getUserTickets(this.$parent);
     },
     refreshReservationCount () {
       /** Callback function that refresh user reservation number. This function is called when function 
@@ -331,7 +337,8 @@ export default {
       return companyName;
     },
 
-    fetchDataWithFilterForCompany (e) {
+
+    fetchDataWithFilter (e) {
       e.preventDefault();
 
       var formatedDepartDate = new Date(this.departDate).getTime();
@@ -345,7 +352,7 @@ export default {
         formatedReturnDate = "";
       }
 
-      TicketClient.loadCompanyFilteredTickets(this.ticketType, this.originCity, this.destinationCity, formatedDepartDate, formatedReturnDate, this.$parent, this.$parent.id);
+      UserClient.getFilteredUserTickets(this.ticketType, this.originCity, this.destinationCity, formatedDepartDate, formatedReturnDate, this.$parent);
 
       return false;
     },
@@ -354,10 +361,11 @@ export default {
       this.$parent.$router.push({ name: 'createTicket' })
     },
 
-
     showCompanyPage (companyId) {
       this.$parent.$router.push({ name: 'company', params: { id: companyId } })
     },
+
+
   },
 
   created () {
@@ -570,6 +578,11 @@ p {
 
 .ticket-number {
   display: inline-block;
+  margin-right: 120px;
+}
+
+.ticket-status {
+  display: inline-block;
 }
 
 .div-book {
@@ -578,7 +591,8 @@ p {
 
 .ticket-company {
   float: right;
-  margin-right: 30px;
+  margin-right: 10px;
+  cursor: pointer;
 }
 
 .return-date {

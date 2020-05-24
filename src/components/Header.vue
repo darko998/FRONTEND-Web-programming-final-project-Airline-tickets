@@ -1,11 +1,13 @@
 <template>
   <div class="header-backgorund">
-    <div class="logo">
-      <img src="../assets/logo.png" />
-    </div>
+    <div class="div-logo" v-on:click="redirectToHome">
+      <div class="logo">
+        <img src="../assets/logo.png" />
+      </div>
 
-    <div class="header-title">
-      <h2>Frontend Project Darko Dimitrijevic RN 94/18</h2>
+      <div class="header-title">
+        <h2>Frontend Project Darko Dimitrijevic RN 94/18</h2>
+      </div>
     </div>
 
     <div class="header-user-book-num" v-if="userData.isUserLoggedIn">
@@ -32,7 +34,7 @@
       </svg>
     </div>
 
-    <div class="header-username" v-if="userData.isUserLoggedIn">
+    <div class="header-username" v-if="userData.isUserLoggedIn" v-on:click="userPage">
       <svg
         class="bi bi-people-circle"
         width="3em"
@@ -67,12 +69,25 @@ export default {
     }
   },
 
+  methods: {
+    userPage () {
+      this.$parent.$router.push({ name: 'userPage', params: { id: localStorage.getItem("userId") } })
+    },
+    redirectToHome () {
+      this.$parent.$router.push({ name: 'home' });
+    }
+  },
+
   props: ['userData'],
 
 }
 </script>
 
 <style scope>
+.div-logo {
+  cursor: pointer;
+}
+
 .header-backgorund {
   width: 100%;
   height: 150px;
@@ -101,6 +116,11 @@ img {
   float: right;
   margin-top: 30px;
   margin-right: 60px;
+}
+
+.header-username:hover {
+  transform: translateY(5px);
+  cursor: pointer;
 }
 
 .header-user-book-num {

@@ -1,5 +1,7 @@
 <template>
   <div>
+    <Header v-bind:userData="this.userData" />
+
     <div class="container">
       <div class="row justify-content-center align-items-center">
         <div class="col-16 col-md-12 col-lg-12" id="create_ticket_div">
@@ -52,6 +54,7 @@
                   id="select-flight"
                   name="select-flight"
                   v-model="flightId"
+                  v-bind="this.flights"
                   :disabled="!this.isFormForNewFlightHidden"
                 >
                   <option
@@ -67,7 +70,7 @@
                   v-if="this.isFormForNewFlightHidden"
                   v-on:click="addNewFlight"
                 >
-                  <span class="tooltiptext">Create new flight</span>
+                  <span class="tooltiptext">Expand form for creating new flight</span>
 
                   <svg
                     class="bi bi-plus-square"
@@ -234,9 +237,14 @@ import CompanyClient from '../fetch_data/companies/companies-client.js'
 import TicketClient from '../fetch_data/tickets/tickets-client.js'
 import FlightClient from '../fetch_data/flights/flights-client.js'
 import CityClient from '../fetch_data/cities/cities-client.js'
+import Header from '@/components/Header'
 
 export default {
   name: "CrateTicket",
+
+  components: {
+    Header
+  },
 
   data () {
     return {
@@ -253,6 +261,12 @@ export default {
       flightId: "",
       isReturnDateHidden: true,
       isFormForNewFlightHidden: true,
+      userData: {
+        isUserLoggedIn: true,
+        username: localStorage.getItem('username'),
+        userType: localStorage.getItem('userType'),
+        reservationCount: 0
+      },
 
     }
   },
@@ -291,6 +305,7 @@ export default {
     },
 
     refreshFlights () {
+      CityClient.loadCities(this);
       FlightClient.loadFlights(this);
     },
 
@@ -327,6 +342,7 @@ export default {
   float: left;
   margin-left: 40px;
   transform: translateY(5px);
+  cursor: pointer;
 }
 
 .icon-add-flight .tooltiptext {
@@ -430,6 +446,6 @@ input[type="datetime-local"] {
   border-radius: 30px;
   padding: 20px;
   background: rgba(116, 189, 231, 0.514);
-  margin-top: 15vh;
+  margin-top: 10vh;
 }
 </style>

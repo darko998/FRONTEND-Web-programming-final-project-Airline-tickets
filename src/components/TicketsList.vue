@@ -36,6 +36,15 @@
       <br />
       <br />
       <form v-on:submit="fetchDataWithFilter">
+        <!-- DROP DOWN FOR TICKET TYPE-->
+        <div>
+          <select class="ticket-type" id="ticket-type" v-model="ticketType">
+            <option :value="2">All</option>
+            <option :value="1">One way</option>
+            <option :value="0">Return</option>
+          </select>
+        </div>
+
         <!-- FROM INPUT FIELD-->
         <div class="form-group">
           <label for="from">
@@ -98,124 +107,126 @@
     </div>
     <!-- END OF DIV FOR FILTERING TICKETS-->
 
-    <ul>
-      <li v-bind:key="ticket.id" v-for="ticket in tickets">
-        <div class="frame-ticket">
-          <!-- DIV FOR TICKETS-->
-          <div class="container-jobs">
-            <div class="ticket-container">
-              <div class="ticket-title">
-                <h1 class="h1-from">{{ getOriginCityNameWithFlightId(ticket.flightId) }}</h1>
-                <h1 class="h1-from">-</h1>
-                <h1 class="h1-to">{{ getDestinationCityNameWithFlightId(ticket.flightId) }}</h1>
+    <div class="div-tickets">
+      <ul>
+        <li v-bind:key="ticket.id" v-for="ticket in tickets">
+          <div class="frame-ticket">
+            <!-- DIV FOR TICKETS-->
+            <div class="container-jobs">
+              <div class="ticket-container">
+                <div class="ticket-title">
+                  <h1 class="h1-from">{{ getOriginCityNameWithFlightId(ticket.flightId) }}</h1>
+                  <h1 class="h1-from">-</h1>
+                  <h1 class="h1-to">{{ getDestinationCityNameWithFlightId(ticket.flightId) }}</h1>
 
-                <div class="icons">
-                  <!-- ICON FOR TICKET EDIT-->
-                  <div class="icon-edit">
-                    <span class="tooltiptext">Edit ticket</span>
-                    <svg
-                      class="bi bi-pencil-square"
-                      width="2em"
-                      height="2em"
-                      viewBox="0 0 16 16"
-                      fill="currentColor"
-                      xmlns="http://www.w3.org/2000/svg"
-                      v-on:click="editTicket"
-                    >
-                      <path
-                        d="M15.502 1.94a.5.5 0 010 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 01.707 0l1.293 1.293zm-1.75 2.456l-2-2L4.939 9.21a.5.5 0 00-.121.196l-.805 2.414a.25.25 0 00.316.316l2.414-.805a.5.5 0 00.196-.12l6.813-6.814z"
-                      />
-                      <path
-                        fill-rule="evenodd"
-                        d="M1 13.5A1.5 1.5 0 002.5 15h11a1.5 1.5 0 001.5-1.5v-6a.5.5 0 00-1 0v6a.5.5 0 01-.5.5h-11a.5.5 0 01-.5-.5v-11a.5.5 0 01.5-.5H9a.5.5 0 000-1H2.5A1.5 1.5 0 001 2.5v11z"
-                        clip-rule="evenodd"
-                      />
-                    </svg>
-                  </div>
+                  <div class="icons">
+                    <!-- ICON FOR TICKET EDIT-->
+                    <div class="icon-edit">
+                      <span class="tooltiptext">Edit ticket</span>
+                      <svg
+                        class="bi bi-pencil-square"
+                        width="2em"
+                        height="2em"
+                        viewBox="0 0 16 16"
+                        fill="currentColor"
+                        xmlns="http://www.w3.org/2000/svg"
+                        v-on:click="editTicket"
+                      >
+                        <path
+                          d="M15.502 1.94a.5.5 0 010 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 01.707 0l1.293 1.293zm-1.75 2.456l-2-2L4.939 9.21a.5.5 0 00-.121.196l-.805 2.414a.25.25 0 00.316.316l2.414-.805a.5.5 0 00.196-.12l6.813-6.814z"
+                        />
+                        <path
+                          fill-rule="evenodd"
+                          d="M1 13.5A1.5 1.5 0 002.5 15h11a1.5 1.5 0 001.5-1.5v-6a.5.5 0 00-1 0v6a.5.5 0 01-.5.5h-11a.5.5 0 01-.5-.5v-11a.5.5 0 01.5-.5H9a.5.5 0 000-1H2.5A1.5 1.5 0 001 2.5v11z"
+                          clip-rule="evenodd"
+                        />
+                      </svg>
+                    </div>
 
-                  <!-- ICON FOR TICKET DELETE-->
-                  <div class="icon-delete">
-                    <span class="tooltiptext">Delete ticket</span>
+                    <!-- ICON FOR TICKET DELETE-->
+                    <div class="icon-delete">
+                      <span class="tooltiptext">Delete ticket</span>
 
-                    <svg
-                      class="bi bi-archive"
-                      width="2em"
-                      height="2em"
-                      viewBox="0 0 16 16"
-                      fill="currentColor"
-                      xmlns="http://www.w3.org/2000/svg"
-                      v-on:click="deleteTicket"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M2 5v7.5c0 .864.642 1.5 1.357 1.5h9.286c.715 0 1.357-.636 1.357-1.5V5h1v7.5c0 1.345-1.021 2.5-2.357 2.5H3.357C2.021 15 1 13.845 1 12.5V5h1z"
-                        clip-rule="evenodd"
-                      />
-                      <path
-                        fill-rule="evenodd"
-                        d="M5.5 7.5A.5.5 0 016 7h4a.5.5 0 010 1H6a.5.5 0 01-.5-.5zM15 2H1v2h14V2zM1 1a1 1 0 00-1 1v2a1 1 0 001 1h14a1 1 0 001-1V2a1 1 0 00-1-1H1z"
-                        clip-rule="evenodd"
-                      />
-                    </svg>
-                  </div>
-                </div>
-              </div>
-
-              <!-- DIV FOR TICKET DESCRIPTION-->
-              <div class="ticket-desc">
-                <div class="desc-without-company">
-                  <!-- DIV FOR DEPART DATE  -->
-                  <div class="depart-date">
-                    <p>Depart date</p>
-                    <h3>{{ new Date(ticket.departDate).toLocaleString() }}</h3>
-                  </div>
-
-                  <!-- DIV FOR RETURN DATE  -->
-                  <div class="return-date">
-                    <p>Return date</p>
-                    <h3>{{ (ticket.returnDate == null) ? "/" : new Date(ticket.returnDate).toLocaleString() }}</h3>
-                  </div>
-
-                  <!-- DIV FOR TICKET TYPE  -->
-                  <div class="one-way">
-                    <p>Ticket type</p>
-                    <h3 v-if="ticket.oneWay">One way</h3>
-                    <h3 v-if="!ticket.oneWay">Return</h3>
-                  </div>
-
-                  <!-- DIV FOR AVAILABLE TICKET NUMBER  -->
-                  <div class="ticket-number">
-                    <p>Available tickets</p>
-                    <h3>{{ ticket.count }}</h3>
+                      <svg
+                        class="bi bi-archive"
+                        width="2em"
+                        height="2em"
+                        viewBox="0 0 16 16"
+                        fill="currentColor"
+                        xmlns="http://www.w3.org/2000/svg"
+                        v-on:click="deleteTicket"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M2 5v7.5c0 .864.642 1.5 1.357 1.5h9.286c.715 0 1.357-.636 1.357-1.5V5h1v7.5c0 1.345-1.021 2.5-2.357 2.5H3.357C2.021 15 1 13.845 1 12.5V5h1z"
+                          clip-rule="evenodd"
+                        />
+                        <path
+                          fill-rule="evenodd"
+                          d="M5.5 7.5A.5.5 0 016 7h4a.5.5 0 010 1H6a.5.5 0 01-.5-.5zM15 2H1v2h14V2zM1 1a1 1 0 00-1 1v2a1 1 0 001 1h14a1 1 0 001-1V2a1 1 0 00-1-1H1z"
+                          clip-rule="evenodd"
+                        />
+                      </svg>
+                    </div>
                   </div>
                 </div>
 
-                <!-- DIV FOR COMPANY  -->
-                <div class="ticket-company">
-                  <p>Company</p>
-                  <h3
-                    v-on:click="showCompanyPage(ticket.companyId)"
-                  >{{ getCompanyNameWithCompanyId(ticket.companyId) }}</h3>
+                <!-- DIV FOR TICKET DESCRIPTION-->
+                <div class="ticket-desc">
+                  <div class="desc-without-company">
+                    <!-- DIV FOR DEPART DATE  -->
+                    <div class="depart-date">
+                      <p>Depart date</p>
+                      <h3>{{ new Date(ticket.departDate).toLocaleString() }}</h3>
+                    </div>
+
+                    <!-- DIV FOR RETURN DATE  -->
+                    <div class="return-date">
+                      <p>Return date</p>
+                      <h3>{{ (ticket.returnDate == null) ? "/" : new Date(ticket.returnDate).toLocaleString() }}</h3>
+                    </div>
+
+                    <!-- DIV FOR TICKET TYPE  -->
+                    <div class="one-way">
+                      <p>Ticket type</p>
+                      <h3 v-if="ticket.oneWay">One way</h3>
+                      <h3 v-if="!ticket.oneWay">Return</h3>
+                    </div>
+
+                    <!-- DIV FOR AVAILABLE TICKET NUMBER  -->
+                    <div class="ticket-number">
+                      <p>Available tickets</p>
+                      <h3>{{ ticket.count }}</h3>
+                    </div>
+                  </div>
+
+                  <!-- DIV FOR COMPANY  -->
+                  <div class="ticket-company">
+                    <p>Company</p>
+                    <h3
+                      v-on:click="showCompanyPage(ticket.companyId)"
+                    >{{ getCompanyNameWithCompanyId(ticket.companyId) }}</h3>
+                  </div>
                 </div>
               </div>
             </div>
+            <!-- DIV FOR BUTTON BOOK  -->
+            <div class="div-book">
+              <button
+                class="apply-button"
+                v-on:click="book(ticket, ticket.flightId)"
+                v-if="!ticket.reserved"
+              >Book</button>
+              <button
+                class="apply-button"
+                v-on:click="unbook(ticket, ticket.flightId)"
+                v-if="ticket.reserved"
+              >UnBook</button>
+            </div>
           </div>
-          <!-- DIV FOR BUTTON BOOK  -->
-          <div class="div-book">
-            <button
-              class="apply-button"
-              v-on:click="book(ticket, ticket.flightId)"
-              v-if="!ticket.reserved"
-            >Book</button>
-            <button
-              class="apply-button"
-              v-on:click="unbook(ticket, ticket.flightId)"
-              v-if="ticket.reserved"
-            >UnBook</button>
-          </div>
-        </div>
-      </li>
-    </ul>
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 
@@ -231,12 +242,13 @@ export default {
   name: "TicketsList",
   methods: {
     book (ticket, flightId) {
-      ReservationClient.book(ticket.id, flightId, this);
-      ticket.reserved = true;
+      ReservationClient.book(ticket, flightId, this);
+
     },
     unbook (ticket) {
-      ReservationClient.unbook(ticket.id, this);
-      ticket.reserved = false;
+      ReservationClient.unbook(ticket, this);
+
+
     },
     loadTickets () {
 
@@ -336,7 +348,7 @@ export default {
         formatedReturnDate = "";
       }
 
-      TicketClient.loadFilteredTickets(this.originCity, this.destinationCity, formatedDepartDate, formatedReturnDate, this.$parent);
+      TicketClient.loadFilteredTickets(this.ticketType, this.originCity, this.destinationCity, formatedDepartDate, formatedReturnDate, this.$parent);
 
       return false;
     },
@@ -364,6 +376,7 @@ export default {
       flights: [],
       cities: [],
       companies: [],
+      ticketType: "2",
       originCity: "",
       destinationCity: "",
       departDate: "",
@@ -377,12 +390,15 @@ export default {
 
 
 <style scoped>
+.div-tickets {
+  overflow: hidden; /* if you don't want #second to wrap below #first */
+}
 .add-ticket-icon-title {
   margin-top: 15px;
 }
 
 .add-icon-div {
-  margin-bottom: 200px;
+  margin-bottom: 150px;
 }
 
 .icon {
@@ -391,6 +407,7 @@ export default {
 
 .icon:hover {
   transform: translateY(5px);
+  cursor: pointer;
 }
 
 ul {
@@ -422,14 +439,17 @@ ul {
   background-color: #3e8e41;
   box-shadow: 0 5px #666;
   transform: translateY(4px);
+  cursor: pointer;
 }
 
 .icon-delete:hover {
   transform: translateY(4px);
+  cursor: pointer;
 }
 
 .icon-edit:hover {
   transform: translateY(4px);
+  cursor: pointer;
 }
 
 .icon-edit:hover .tooltiptext {
@@ -561,6 +581,7 @@ p {
 .ticket-company {
   float: right;
   margin-right: 30px;
+  cursor: pointer;
 }
 
 .return-date {
@@ -600,7 +621,13 @@ p {
   float: left; /* add this */
   margin-left: 30px;
   margin-right: 130px;
-  min-height: 100vh;
+  height: 100% !important;
+}
+
+.ticket-type {
+  font-size: 22px;
+  width: 100%;
+  margin-bottom: 50px;
 }
 
 .container-jobs {

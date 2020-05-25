@@ -9,7 +9,7 @@
           <br />
           <br />
           <!-- FORM -->
-          <form id="form_create_ticket" class="col-lg-12 offset-lg-3" v-on:submit="createTicket">
+          <form id="form_create_ticket" class="col-lg-12 offset-lg-3" v-on:submit="updateTicket">
             <!-- TICKET TYPE RADIO BUTTONS -->
             <fieldset class="form-group">
               <div class="row">
@@ -223,7 +223,7 @@
             </div>
             <!-- SUBMIT BUTTON -->
             <div class="button-div">
-              <button id="submit-btn" type="Submit" class="btn btn-success">Create ticket</button>
+              <button id="submit-btn" type="Submit" class="btn btn-success">Update ticket</button>
             </div>
           </form>
           <!-- CLOSE BUTTON -->
@@ -244,7 +244,7 @@ import CityClient from '../fetch_data/cities/cities-client.js'
 import Header from '@/components/Header'
 
 export default {
-  name: "CrateTicket",
+  name: "UpdateTicket",
 
   components: {
     Header
@@ -279,11 +279,14 @@ export default {
     CompanyClient.loadCompanies(this);
     FlightClient.loadFlights(this);
     CityClient.loadCities(this);
+    TicketClient.loadTicketById(this.$route.params.id, this);
+
   },
 
   methods: {
-    createTicket (e) {
+    updateTicket (e) {
       e.preventDefault();
+
 
       if (!this.isFormForNewFlightHidden) {
         if (this.from === "" || this.to === "") {
@@ -318,19 +321,11 @@ export default {
       let convertedDepartDate = new Date(this.departDate).getTime();
       let convertedReturnDate = new Date(this.returnDate).getTime();
 
-      TicketClient.createTicket(this.oneWay, this.from, this.to, convertedDepartDate, convertedReturnDate, this.count, this.companyId, this.flightId, this);
+      if (this.isReturnDateHidden)
+        /** If form for return date is hidden then that ticket is one way and set return date to ""s */
+        convertedReturnDate = ""
 
-      this.oneWay = "true";
-      this.from = "";
-      this.to = "";
-      this.departDate = "";
-      this.returnDate = "";
-      this.count = "";
-      this.companyId = "";
-      this.flightId = "";
-      this.isReturnDateHidden = true;
-      this.isFormForNewFlightHidden = true;
-
+      TicketClient.updateTicket(this.$route.params.id, this.oneWay, this.from, this.to, convertedDepartDate, convertedReturnDate, this.count, this.companyId, this.flightId, this);
 
 
       return false;
@@ -339,6 +334,11 @@ export default {
     refreshFlights () {
       CityClient.loadCities(this);
       FlightClient.loadFlights(this);
+    },
+
+    goBack () {
+      /** Here we go one url back */
+      this.$router.go(-1);
     },
 
     addNewFlight () {

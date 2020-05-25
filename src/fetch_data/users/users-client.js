@@ -8,7 +8,8 @@ let ClientUser = {
 		axios.get(baseUrl, {
 			headers: {
 				"Accept": "application/json",
-				"Content-Type": "application/json"
+				"Content-Type": "application/json",
+				"Authorization": "Bearer " + localStorage.jwt
 			}
 		}).then((response) => {
 			comp.users = JSON.parse(JSON.stringify(response.data))
@@ -87,6 +88,45 @@ let ClientUser = {
 		}).then((response) => {
 			console.log(JSON.parse(JSON.stringify(response.data)));
 			comp.tickets = JSON.parse(JSON.stringify(response.data));
+		}, (error) => {
+			console.log("An error occured:");
+			console.log(error);
+		});
+	},
+
+
+	createUser (username, password, userType) {
+		axios.post(baseUrl + "/create", false, {
+			headers: {
+				"Accept": "application/json",
+				"Content-Type": "application/json",
+				"Authorization": "Bearer " + localStorage.jwt
+			},
+			params: {
+				username: username,
+				password: password,
+				userType: userType
+			}
+		}).then((response) => {
+			console.log(JSON.parse(JSON.stringify(response.data)));
+		}, (error) => {
+			console.log("An error occured:");
+			console.log(error);
+			alert("User with username (" + username + ") already exists. Pick another one username!");
+		});
+	},
+
+
+	loadUserTypes (comp) {
+		axios.get(baseUrl + "/types", {
+			headers: {
+				"Accept": "application/json",
+				"Content-Type": "application/json",
+				"Authorization": "Bearer " + localStorage.jwt
+			}
+		}).then((response) => {
+			comp.userTypes = JSON.parse(JSON.stringify(response.data))
+			console.log(JSON.parse(JSON.stringify(response.data)))
 		}, (error) => {
 			console.log("An error occured:");
 			console.log(error);

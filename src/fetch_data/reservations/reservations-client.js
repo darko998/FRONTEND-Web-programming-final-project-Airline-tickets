@@ -5,6 +5,13 @@ const baseUrl = "http://localhost:9999/AirlineApp/reservations";
 let ReservationClient = {
 
 	book (ticket, flightId, comp) {
+
+		/** Check if there is less then 24h before depart date. If yes, then we can't book this ticket.*/
+		if (ticket.departDate < new Date(Date.now() + 86400000)) {
+			alert("Ticket can be booked only 24h before depart date.")
+			return;
+		}
+
 		axios.post(baseUrl + "/book", null, {
 			headers: {
 				"Accept": "application/json",
@@ -38,6 +45,13 @@ let ReservationClient = {
 	},
 
 	unbook (ticket, comp) {
+
+		/** Check if there is less then 24h before depart date. If yes, then we can't unbook this ticket.*/
+		if (ticket.departDate < new Date(Date.now() + 86400000)) {
+			alert("Ticket can be booked only 24h before depart date.")
+			return;
+		}
+
 		axios.post(baseUrl + "/delete", null, {
 			headers: {
 				"Accept": "application/json",

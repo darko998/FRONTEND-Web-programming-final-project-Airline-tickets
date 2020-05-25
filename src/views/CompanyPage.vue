@@ -6,7 +6,7 @@
         <h1>{{ companyName }}</h1>
         <CompanyEditForm v-bind:company="this.company" v-if="showForm" />
       </div>
-      <div class="div-icons">
+      <div class="div-icons" v-if="currUserType === 'ADMINISTRATOR' || currUserType === 'FULL'">
         <!-- ICON FOR TICKET EDIT-->
         <div class="icon-edit">
           <span class="tooltiptext">Edit company</span>
@@ -80,6 +80,7 @@ export default {
   },
 
   created () {
+    this.currUserType = localStorage.getItem("userType");
     this.id = this.$route.params.id
     CompanyClient.getCompanyNameById(this.id, this);
     CompanyClient.loadCompanies(this);
@@ -102,7 +103,8 @@ export default {
         companyName: "",
         version: ""
       },
-      showForm: false
+      showForm: false,
+      currUserType: ""
     }
   },
 
@@ -126,8 +128,19 @@ export default {
           this.companies[i].version = version;
         }
       }
+    },
+    deleteTicket (id) {
+      let tmpTickets = [];
+      let k = 0;
 
+      for (let i in this.tickets) {
+        if (this.tickets[i].id == id)
+          continue;
+        tmpTickets[k] = this.tickets[i]
+        k++;
+      }
 
+      this.tickets = tmpTickets;
     }
   }
 

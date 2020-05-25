@@ -82,7 +82,29 @@ let CompaniesClient = {
 			console.log(error);
 			alert("This operation failed!");
 		});
+	},
+
+	createCompany (name) {
+		console.log("----------- " + name);
+		axios.post(baseUrl + "/create", false, {
+			headers: {
+				"Accept": "application/json",
+				"Content-Type": "application/json",
+				"Authorization": "Bearer " + localStorage.jwt
+			},
+			params: {
+				name: name
+			}
+		}).then((response) => {
+			console.log(JSON.parse(JSON.stringify(response.data)));
+		}, (error) => {
+			console.log("An error occured:");
+			console.log(error);
+			alert("There is already company with that name in database. Pick another name!");
+		});
 	}
+
+
 }
 
 

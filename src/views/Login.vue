@@ -80,6 +80,7 @@ export default {
 
       return false;
     }
+
   },
 
   data () {
@@ -112,12 +113,7 @@ export default {
 .div-background {
   width: 100%;
   height: 100%;
-  background: rgb(180, 171, 171) !important;
-  background: radial-gradient(
-    circle,
-    rgba(180, 171, 171, 1) 0%,
-    rgba(77, 158, 255, 1) 100%
-  ) !important;
+  background: rgb(236, 235, 235) !important;
 
   display: -webkit-box; /* OLD - iOS 6-, Safari 3.1-6, BB7 */
   display: -ms-flexbox; /* TWEENER - IE 10 */

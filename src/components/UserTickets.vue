@@ -2,107 +2,86 @@
   <div class="div-background">
     <!-- DIV FOR FILTERING TICKETS-->
     <div class="container-filter">
-      <div class="add-icon-div">
-        <div class="icon">
-          <svg
-            class="bi bi-plus-square"
-            width="4em"
-            height="4em"
-            viewBox="0 0 16 16"
-            fill="green"
-            xmlns="http://www.w3.org/2000/svg"
-            v-on:click="addNewTicket"
-          >
-            <path
-              fill-rule="evenodd"
-              d="M8 3.5a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5H4a.5.5 0 0 1 0-1h3.5V4a.5.5 0 0 1 .5-.5z"
+      <div v-if="currUserType !== 'ADMINISTRATOR' || currUserType === 'FULL'">
+        <h4>Filter tickets</h4>
+        <br />
+        <br />
+        <form v-on:submit="fetchDataWithFilter">
+          <!-- DROP DOWN FOR TICKET TYPE-->
+          <div>
+            <select class="ticket-type" id="ticket-type" v-model="ticketType">
+              <option :value="2">All</option>
+              <option :value="1">One way</option>
+              <option :value="0">Return</option>
+            </select>
+          </div>
+
+          <!-- FROM INPUT FIELD-->
+          <div class="form-group">
+            <label for="from">
+              <strong>From</strong>
+            </label>
+            <input
+              type="text"
+              class="form-control"
+              id="from"
+              placeholder="From"
+              v-model="originCity"
             />
-            <path
-              fill-rule="evenodd"
-              d="M7.5 8a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1H8.5V12a.5.5 0 0 1-1 0V8z"
+          </div>
+
+          <!-- DESTINATION INPUT FIELD-->
+          <div class="form-group">
+            <label for="to">
+              <strong>To</strong>
+            </label>
+            <input
+              type="text"
+              class="form-control"
+              id="to"
+              placeholder="To"
+              v-model="destinationCity"
             />
-            <path
-              fill-rule="evenodd"
-              d="M14 1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"
+          </div>
+
+          <br />
+          <hr class="my-4" />
+          <br />
+          <!-- DEPART DATE FIELD-->
+          <div class="form-group">
+            <label for="depart-date">
+              <strong>Depart date</strong>
+            </label>
+            <input
+              type="datetime-local"
+              class="form-control"
+              id="depart-date"
+              placeholder="Return date"
+              v-model="departDate"
             />
-          </svg>
-        </div>
-        <h5 class="add-ticket-icon-title">
-          <strong>Add ticket</strong>
-        </h5>
+          </div>
+
+          <!-- RETURN DATE FIELD-->
+          <div class="form-group">
+            <label for="return-date">
+              <strong>Return date</strong>
+            </label>
+            <input
+              type="datetime-local"
+              class="form-control"
+              id="return-date"
+              placeholder="Return date"
+              v-model="returnDate"
+            />
+          </div>
+
+          <br />
+          <br />
+          <br />
+          <!-- FILTER SUBMIT BUTTON-->
+          <button type="submit" class="btn btn-success">Apply filter</button>
+        </form>
       </div>
-      <h4>Filter tickets</h4>
-      <br />
-      <br />
-      <form v-on:submit="fetchDataWithFilter">
-        <!-- DROP DOWN FOR TICKET TYPE-->
-        <div>
-          <select class="ticket-type" id="ticket-type" v-model="ticketType">
-            <option :value="2">All</option>
-            <option :value="1">One way</option>
-            <option :value="0">Return</option>
-          </select>
-        </div>
-
-        <!-- FROM INPUT FIELD-->
-        <div class="form-group">
-          <label for="from">
-            <strong>From</strong>
-          </label>
-          <input type="text" class="form-control" id="from" placeholder="From" v-model="originCity" />
-        </div>
-
-        <!-- DESTINATION INPUT FIELD-->
-        <div class="form-group">
-          <label for="to">
-            <strong>To</strong>
-          </label>
-          <input
-            type="text"
-            class="form-control"
-            id="to"
-            placeholder="To"
-            v-model="destinationCity"
-          />
-        </div>
-
-        <br />
-        <hr class="my-4" />
-        <br />
-        <!-- DEPART DATE FIELD-->
-        <div class="form-group">
-          <label for="depart-date">
-            <strong>Depart date</strong>
-          </label>
-          <input
-            type="datetime-local"
-            class="form-control"
-            id="depart-date"
-            placeholder="Return date"
-            v-model="departDate"
-          />
-        </div>
-
-        <!-- RETURN DATE FIELD-->
-        <div class="form-group">
-          <label for="return-date">
-            <strong>Return date</strong>
-          </label>
-          <input
-            type="datetime-local"
-            class="form-control"
-            id="return-date"
-            placeholder="Return date"
-            v-model="returnDate"
-          />
-        </div>
-
-        <br />
-        <br />
-        <br />
-        <!-- FILTER SUBMIT BUTTON-->
-        <button type="submit" class="btn btn-success">Apply filter</button>
-      </form>
     </div>
     <!-- END OF DIV FOR FILTERING TICKETS-->
 
@@ -118,7 +97,10 @@
                   <h1 class="h1-from">-</h1>
                   <h1 class="h1-to">{{ getDestinationCityNameWithFlightId(ticket.flightId) }}</h1>
 
-                  <div class="icons">
+                  <div
+                    class="icons"
+                    v-if="currUserType === 'ADMINISTRATOR' || currUserType === 'FULL'"
+                  >
                     <!-- ICON FOR TICKET EDIT-->
                     <div class="icon-edit">
                       <span class="tooltiptext">Edit ticket</span>
@@ -369,16 +351,21 @@ export default {
   },
 
   created () {
-    this.loadTickets();
-    this.loadFlights();
-    this.loadCities();
-    this.loadCompanies();
+    this.currUserType = localStorage.getItem("userType");
+
+    if (this.currUserType === "REGULAR" || this.currUserType === "FULL") {
+      this.loadTickets();
+      this.loadFlights();
+      this.loadCities();
+      this.loadCompanies();
+    }
   },
 
   props: ['tickets'],
 
   data () {
     return {
+      currUserType: "",
       flights: [],
       cities: [],
       companies: [],

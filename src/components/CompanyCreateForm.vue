@@ -1,7 +1,7 @@
 <template>
   <div>
-    <form class="form-signin" v-on:submit="updateCompany">
-      <p for="name">Enter new company name</p>
+    <form class="form-signin" v-on:submit="createCompany">
+      <p for="name">Enter company name</p>
 
       <div class="form-label-group">
         <input
@@ -9,9 +9,8 @@
           id="name"
           class="form-control"
           placeholder="Company name"
-          v-model="company.newName"
+          v-model="company.name"
           required
-          autofocus
         />
       </div>
 
@@ -21,7 +20,7 @@
 
       <br />
 
-      <button class="btn btn-lg btn-success btn-block text-uppercase" type="submit">Save</button>
+      <button class="btn btn-lg btn-success btn-block text-uppercase" type="submit">Create</button>
     </form>
     <button
       id="close-btn"
@@ -35,35 +34,27 @@
 import CompaniesClient from '../fetch_data/companies/companies-client.js'
 
 export default {
-  name: "CompanyEditForm",
+  name: "CompanyCreateForm",
 
   methods: {
-    updateCompany (e) {
+    createCompany (e) {
       e.preventDefault();
 
-      let version = this.findCompanyById(this.$parent.company.companyId).version;
-      CompaniesClient.updateCompany(this.company.newName, version, this);
+      CompaniesClient.createCompany(this.company.name, this);
 
+      this.company.name = "";
 
       return false;
     },
     closeForm () {
-      this.$parent.showForm = false;
-    },
-    findCompanyById (id) {
-      let tmpCompanies = this.$parent.companies;
-
-      for (let i in tmpCompanies) {
-        if (tmpCompanies[i].id == id)
-          return tmpCompanies[i];
-      }
+      this.$parent.showCompanyForm = false;
     }
   },
 
   data () {
     return {
       company: {
-        newName: ""
+        name: ""
       },
       errorMsg: "This name already exists in database! Pick another one.",
       showErrorMsg: false

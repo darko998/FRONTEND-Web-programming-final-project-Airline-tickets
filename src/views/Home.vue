@@ -20,6 +20,22 @@ export default {
     Header
   },
   methods: {
+    /** Method which delete one ticket from tickets. Which we use to update home page when some
+     * ticket is deleted.
+     */
+    deleteTicket (id) {
+      let tmpTickets = [];
+      let k = 0;
+
+      for (let i in this.tickets) {
+        if (this.tickets[i].id == id)
+          continue;
+        tmpTickets[k] = this.tickets[i]
+        k++;
+      }
+
+      this.tickets = tmpTickets;
+    }
   },
   data () {
     return {

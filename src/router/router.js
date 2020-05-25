@@ -5,7 +5,7 @@ import Home from '@/views/Home'
 import CompanyPage from '@/views/CompanyPage'
 import CreateTicket from '@/views/CreateTicket'
 import UserPage from '@/views/UserPage'
-
+import UpdateTicket from '@/views/UpdateTicket'
 
 
 Vue.use(VueRouter);
@@ -37,6 +37,11 @@ let router = new VueRouter({
 			path: '/tickets/create',
 			name: 'createTicket',
 			component: CreateTicket
+		},
+		{
+			path: '/tickets/:id/update',
+			name: 'updateTicket',
+			component: UpdateTicket
 		}
 	]
 })
